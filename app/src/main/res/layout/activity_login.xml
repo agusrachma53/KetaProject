@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:background="#FE6"
+    tools:context="com.bootcamp.xsis.keta.loginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip">
+
+        <ImageView
+            android:layout_width="154dp"
+            android:layout_height="141dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_logo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textColor="@color/colorButton"
+            android:text="LOGIN GUEST"
+            android:textAlignment="center"
+            android:textSize="40px" />
+
+        <EditText
+            android:id="@+id/l_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:hint="phone"
+            android:inputType="number"
+            android:textStyle="italic"></EditText>
+
+        <EditText
+            android:id="@+id/l_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/username"
+            android:hint="password"
+            android:inputType="textPassword"></EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textSize="10dp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="7dp"
+                    android:text="" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show Password" />
+            </LinearLayout>
+        </LinearLayout>
+        <Button
+            android:id="@+id/b_SignIn"
+            android:layout_width="136dp"
+            android:layout_height="38dp"
+            android:layout_below="@+id/password"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorButton"
+            android:text="SIGN IN"
+            android:textColor="@color/colorFontButton" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dip"
+            android:paddingTop="10dip"
+            android:text="Or"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/b_signUp"
+            android:layout_width="136dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:background="@color/colorButton"
+            android:text="SIGN UP "
+            android:textColor="@color/colorFontButton" />
+    </LinearLayout>
+</RelativeLayout>
