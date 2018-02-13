@@ -77,24 +77,14 @@
         tools:layout_editor_absoluteX="0dp">
 
         <Button
-            android:id="@+id/backToShop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#df0000"
-            android:textColor="@color/colorFontButton"
-            android:text="Back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <Button
             android:id="@+id/order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:textColor="@color/colorFontButton"
             android:background="@color/colorButton"
-            android:text="Order" />
+            android:text="Order"
+            android:textColor="@color/colorFontButton" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -35,7 +36,8 @@ public class PaymentPage extends AppCompatActivity {
     Context mContext;
     showMenu[] daftar;
     ArrayAdapter<CharSequence> adapter;
-    Button btn1, btn2 ;
+    Button btn2 ;
+    ImageButton btn1;
     Cursor cursor;
     private String Alamat, ATM, NamaUser, KodePesan, nameUser, subtotalnya;
     private int total;
@@ -70,12 +72,19 @@ public class PaymentPage extends AppCompatActivity {
         textsubtotal = (TextView)findViewById(R.id.txtSubTotal);
         texttotal = (TextView)findViewById(R.id.txtTotal);
         textbiayaKirim = (TextView)findViewById(R.id.txtBiayaKirim);
-        btn1 = (Button) findViewById(R.id.btnBatal);
+        btn1 = (ImageButton) findViewById(R.id.backtomenu);
         btn2 = (Button) findViewById(R.id.btnBayar);
         editText = (EditText) findViewById(R.id.editAlamat);
 
         spinATM = (Spinner)findViewById(R.id.spinATM);
         spinATM.setAdapter(adapter);
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         this.mContext = mContext;
         this.daftar = daftar;
@@ -191,12 +200,6 @@ public class PaymentPage extends AppCompatActivity {
             }
         });
 
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
 
     public void sendMessage(String idx, String KodePesanan){

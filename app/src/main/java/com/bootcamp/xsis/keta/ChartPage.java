@@ -3,10 +3,12 @@ package com.bootcamp.xsis.keta;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,11 @@ public class ChartPage extends AppCompatActivity {
         sqLiteDBHelper = new SQLiteDbHelper(mcontext);
         sessionKP = new SessionManagerKP(getApplicationContext());
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.detail_custom_actionbar);
+        getSupportActionBar().getCustomView();
+
         final Intent intent = (Intent) getIntent();
         final int id_users = intent.getExtras().getInt("idnya");
         showMenu[] praInsertOrder = sqlHelper.orderPesan(id_users);
@@ -70,7 +77,7 @@ public class ChartPage extends AppCompatActivity {
             int xyz = xxx[0].getSubtotal();
             toalakhir.setText(String.valueOf(xyz));
 
-            Button backToMenu = (Button) findViewById(R.id.backToShop);
+            ImageButton backToMenu = (ImageButton) findViewById(R.id.backtomenu);
             backToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
