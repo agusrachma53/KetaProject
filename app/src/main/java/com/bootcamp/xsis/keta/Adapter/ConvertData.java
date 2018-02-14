@@ -1,17 +1,35 @@
 package com.bootcamp.xsis.keta.Adapter;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ASUS Notebook on 13/02/2018.
  */
 
 public class ConvertData {
+
+    private showMenu showMenus;
+    private String successMessage;
+    private Context context;
+
+    public ConvertData(Context context){
+        this.context = context;
+    }
 
     public List<showMenu> mListData;
 
@@ -100,16 +118,13 @@ public class ConvertData {
             for (int i = 0; i < jsonArray.length();i++){
                 JSONObject dataProduct = jsonArray.getJSONObject(i);
                 String id_user = dataProduct.getString("id_user");
-                String nama_user = dataProduct.getString("nama_user");
                 String id_kategori_produk = dataProduct.getString("id_kategori_produk");
                 String id_produk = dataProduct.getString("id_produk");
                 String kuantity = dataProduct.getString("kuantity");
                 String subtotal = dataProduct.getString("subtotal");
                 String total = dataProduct.getString("total");
 
-
                 setData.setId_user(Integer.parseInt(id_user));
-                setData.setNama_user(nama_user);
                 setData.setId_kategori_produk(id_kategori_produk);
                 setData.setId_product(id_produk);
                 setData.setQuantity(Integer.parseInt(kuantity));
@@ -122,5 +137,48 @@ public class ConvertData {
         }
         return setData;
     }
+
+    public String insertData(final showMenu dataInsert, String baseUrl) {
+
+        baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_insertOrderMenu.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, baseUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    Log.d("messagenya",""+jsonObject.getString("message"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("id_user", String.valueOf(dataInsert.getId_user()));
+                params.put("nama_user",dataInsert.getNama_user());
+                params.put("id_kategori_produk",dataInsert.getId_kategori_produk());
+                params.put("id_produk",dataInsert.getId_product());
+                params.put("kuantity", String.valueOf(dataInsert.getQuantity()));
+                params.put("subtotal", String.valueOf(dataInsert.getSubtotal()));
+                params.put("total", String.valueOf(dataInsert.getTotalAkhir()));
+                return params;
+            }
+        };
+        WebServices.getmInstance(context).addToRequestque(stringRequest);
+        return successMessage;
+    };
+
 
 }

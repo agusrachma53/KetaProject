@@ -44,21 +44,25 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ProductDetail extends AppCompatActivity {
 
     private Context mcontext;
-    private SQLiteDbHelper sqLiteDBHelper;
-    public QueryHelper sqlHelper;
-    private showMenu[] showMenus;
     private SessionManager session;
+    private showMenu showMenus;
     private String baseUrl;
     private ProgressDialog mProgressDialog;
-    private TextView Total,name_product,price_produc,total;
+    private TextView Total;
+    private TextView name_product;
+    private TextView price_produc;
+    private TextView total,actCharts;
+    private int actChart,hasil,hasil2;
     private ImageView icon;
-    private  ArrayAdapter<String> dataAdapter;
+    private ArrayAdapter<String> dataAdapter;
     private Spinner qtyList;
     private Button GoToChart;
 
@@ -83,6 +87,7 @@ public class ProductDetail extends AppCompatActivity {
         qtyList = (Spinner) findViewById(R.id.qtySpinner);
         total = (TextView) findViewById(R.id.name_of_total);
         GoToChart = (Button) findViewById(R.id.goToChart);
+        actCharts = (TextView) findViewById(R.id.actChart);
 
         mProgressDialog = new ProgressDialog(ProductDetail.this);
         mProgressDialog.setMessage("Loading ...");
@@ -107,22 +112,22 @@ public class ProductDetail extends AppCompatActivity {
     public void getdata(final String idProduct, final String idSelect){
 
             baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_product.php?idProduct="+idProduct;
+
             StringRequest request = new StringRequest(Request.Method.GET, baseUrl, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
 
                     mProgressDialog.dismiss();
-                    ConvertData convertData = new ConvertData();
+                    ConvertData convertData = new ConvertData(mcontext);
                     final showMenu datanya =  convertData.getSpesificData(response);
 
-                    final String dataarray[] = new String[7];
-                    dataarray[0] = datanya.getId_product();
-                    dataarray[1] = datanya.getNama_produk();
-                    dataarray[2] = datanya.getGambar_produk();
-                    dataarray[3] = datanya.getDesk_produk();
-                    dataarray[4] = datanya.getId_kategori_produk();
-                    dataarray[5] = String.valueOf(datanya.getHarga_produk());
-                    dataarray[6] = datanya.getKategorii_produk();
+                    String nama_produk;
+                    final String dataarray[] = new String[5];
+                    dataarray[0] = datanya.getNama_produk();
+                    dataarray[1] = datanya.getGambar_produk();
+                    dataarray[2] = datanya.getDesk_produk();
+                    dataarray[3] = datanya.getId_kategori_produk();
+                    dataarray[4] = datanya.getKategorii_produk();
 
 
                     name_product.setText(datanya.getNama_produk());
@@ -167,6 +172,10 @@ public class ProductDetail extends AppCompatActivity {
                             int hasil4 = price3 * qty3;
                             mProgressDialog.show();
                             GotoChart(idProduct,qty3,hasil4,idSelect,dataarray);
+                            actChart = Integer.parseInt(qty2);
+                            hasil = actChart;
+                            hasil2 = hasil + actChart;
+                            actCharts.setText(String.valueOf(hasil2));
                         }
                     });
 
@@ -183,109 +192,46 @@ public class ProductDetail extends AppCompatActivity {
 
     }
 
-    public void GotoChart(String idProduct, final int qtyAja, int price, final String idSelect, final String dataarray[]){
+    public void GotoChart(final String idProduct, final int qtyAja, final int price, final String idSelect, final String dataarray[]){
 
         String table = "ordermenu";
 
-        baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_ordermenu.php?idUser=1&idProduk='"+ idProduct +"'";
-
+        baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_ordermenu.php?idUser=1&idProduk="+idProduct;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
-                ConvertData convertData = new ConvertData();
+                ConvertData convertData = new ConvertData(mcontext);
                 showMenu data = convertData.getOrderMenu(response);
 
-                for(int i = 0; i <  dataarray.length; i++){
-
-                    int qty2 = 0;
-                    if(idSelect != null){
-                        qty2 = data.getQuantity() + qtyAja;
-                    }else{
-                        qty2  = qtyAja;
-                    }
-
-                    Log.d("qtynyaaja",""+qty2);
-
+                int qty2 = 0;
+                if (idSelect != null) {
+                    qty2 = data.getQuantity() + qtyAja;
+                } else {
+                    qty2 = qtyAja;
                 }
 
+                int Subtotal = price * qty2;
+
+                showMenu setData = new showMenu();
+                setData.setId_user(3);
+                setData.setNama_user("Agus Rachman");
+                setData.setId_kategori_produk(dataarray[3]);
+                setData.setId_product(idProduct);
+                setData.setQuantity(qty2);
+                setData.setSubtotal(Subtotal);
+                setData.setTotalAkhir(Subtotal);
+
+                String inserData = convertData.insertData(setData,baseUrl);
+                Log.d("Messagenya",""+inserData);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
             }
         });
 
         WebServices.getmInstance(mcontext).addToRequestque(stringRequest);
-
-
-
-//        session = new SessionManager(getApplicationContext());
-//        String phone =  session.phone();
-//        this.showMenus = showMenus;
-//        this.mcontext = mcontext;
-//        sqLiteDBHelper = new SQLiteDbHelper(mcontext);
-//        sqlHelper = new QueryHelper(sqLiteDBHelper);
-//
-//        int idUser;
-//        String nameUser;
-//        showMenu[] praInsertOrder = sqlHelper.detailUser(phone);
-
-//        nameUser = praInsertOrder[0].getNama_user();
-//        phone = praInsertOrder[0].getPhoneNumber();
-
-//        String nameProduct = name_product;
-//        showMenu[] preInsert = sqlHelper.showDetailMenu(nameProduct);
-//        String id_pr_GoToChart = preInsert[0].getId_product();
-//        String nama_pr_GoToChart = preInsert[0].getNama_produk();
-//        String gambar_pr_GOToChart = preInsert[0].getGambar_produk();
-//        String desk_pr_GoToChart = preInsert[0].getDesk_produk();
-//        String category_pr_GoToChart = preInsert[0].getKategorii_produk();
-//        int harga_pr_GoToChart = preInsert[0].getHarga_produk();
-//        showMenu[] showMenus = sqlHelper.detailUser(phone);
-//        idUser  = showMenus[0].getId_user();
-//        nameUser = showMenus[0].getNama_user();
-//        phone = showMenus[0].getPhoneNumber();
-//        nameProduct = name_product;
-
-
-        //rumus subtotal dan total
-
-//        int subtotal = harga_pr_GoToChart * qtyAja;
-//
-//        String table = "ordermenu";
-//        Cursor countData = sqlHelper.cekData(id_pr_GoToChart,idUser,table);
-//        if(countData.getCount() > 0){
-//            showMenu[] getSubtotal = sqlHelper.orderPesan2(idUser,id_pr_GoToChart);
-//            int getQty = getSubtotal[0].getQuantity();
-//
-//            int qty2 = 0;
-//            if(idSelect != null){
-//                qty2 = getQty + qtyAja;
-//            }else{
-//                qty2  = qtyAja;
-//            }
-//
-//            SQLiteDatabase db = sqLiteDBHelper.getWritableDatabase();
-//            db.execSQL("UPDATE "+table+" SET kuantity = '"+ qty2 +"' WHERE id_produk = '"+id_pr_GoToChart+"' AND id_user = '"+idUser+"'");
-//            db.execSQL("UPDATE ordermenu SET subtotal = '"+ subtotal + "' WHERE id_produk = '"+id_pr_GoToChart+"' AND id_user = '"+idUser+"'");
-//            db.execSQL("UPDATE history SET quantity = '"+ qty2 +"' WHERE idProduk = '"+id_pr_GoToChart+"' AND namaUser = '"+nameUser+"'");
-//            db.execSQL("UPDATE history SET subtotal = '"+ subtotal + "' WHERE idProduk = '"+id_pr_GoToChart+"' AND namaUser = '"+nameUser+"'");
-//        }else{
-////            showMenu[] data = sqlHelper.tambahQty(id_pr_GoToChart,table,idUser);
-//            SQLiteDatabase db = sqLiteDBHelper.getWritableDatabase();
-//            db.execSQL("INSERT INTO ordermenu(id_user,nama_user,id_kategori_produk,id_produk,kuantity,subtotal) " +
-//                    "VALUES('" + idUser + "','" +nameUser+"','"+ category_pr_GoToChart  +"','"+
-//                    id_pr_GoToChart +"','"+qtyAja+"','"+price+"')");
-//            db.execSQL("INSERT INTO history (idUser,namaUser,idKategoriProduk,idProduk,quantity,subtotal,imageProduk) " +
-//                    "VALUES('"+idUser+"','"+nameUser+"','"+ category_pr_GoToChart  +"','"+
-//                    id_pr_GoToChart +"','"+qtyAja+"','"+price+"','"+gambar_pr_GOToChart+"')");
-//        }
-//        Intent goToChartnya = new Intent(ProductDetail.this,ChartPage.class);
-//        goToChartnya.putExtra("idnya",idUser);
-//        startActivity(goToChartnya);
-
     }
 }

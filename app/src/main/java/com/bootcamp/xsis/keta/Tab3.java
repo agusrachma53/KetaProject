@@ -88,7 +88,7 @@ public class Tab3 extends Fragment {
             public void onResponse(String response) {
                 mProgressDialog.dismiss();
 
-                ConvertData convertData = new ConvertData();
+                ConvertData convertData = new ConvertData(mcontext);
                 CustomAdapterMenu customAdapterMenu = new CustomAdapterMenu(convertData.getAllProduct(response),getContext());
                 customAdapterMenu.notifyDataSetChanged();
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
