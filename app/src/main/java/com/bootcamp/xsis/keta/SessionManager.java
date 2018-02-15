@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.bootcamp.xsis.keta.Adapter.ConvertData;
+
 import java.util.HashMap;
 
 /**
@@ -39,11 +41,42 @@ public class SessionManager {
     //password key
     public  static final  String KEY_PASS = "password";
 
+    //Quantity Key
+    public static final String KEY_QTY = "0";
+
+    //message
+    public static final String KEY_MESSAGE = "message";
+
+    //Total
+    public static final String KEY_TOTAL = "0";
+
     //Constructor
     public SessionManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
+    }
+
+
+
+    public void sessionChart(String qty){
+
+        editor.putString(KEY_QTY,qty);
+        editor.commit();
+    }
+
+    public void sessionMessage(String message){
+
+        editor.putString(KEY_MESSAGE,message);
+        editor.commit();
+
+    }
+
+    public void total(String total){
+
+        editor.putString(KEY_MESSAGE,total);
+        editor.commit();
+
     }
 
     //Login Session
@@ -104,6 +137,21 @@ public class SessionManager {
     public String pass(){
         String pass =  pref.getString(KEY_PASS, null);
         return pass;
+    }
+
+    public String qty(){
+        String qty = pref.getString(KEY_QTY,null);
+        return qty;
+    }
+
+    public String total(){
+        String total = pref.getString(KEY_TOTAL,null);
+        return total;
+    }
+
+    public String message(){
+        String message = pref.getString(KEY_MESSAGE,null);
+        return message;
     }
 
     //Clear Session detail

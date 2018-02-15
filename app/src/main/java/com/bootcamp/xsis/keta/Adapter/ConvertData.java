@@ -1,18 +1,24 @@
 package com.bootcamp.xsis.keta.Adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bootcamp.xsis.keta.R;
+import com.bootcamp.xsis.keta.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +32,7 @@ public class ConvertData {
     private showMenu showMenus;
     private String successMessage;
     private Context context;
+    private SessionManager session;
 
     public ConvertData(Context context){
         this.context = context;
@@ -71,6 +78,48 @@ public class ConvertData {
         return mListData;
     }
 
+    public List<showMenu> getAllProductChart(String response){
+
+        mListData = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+            for(int i =0; i < jsonArray.length(); i++){
+
+                JSONObject dataProduct = jsonArray.getJSONObject(i);
+
+                String id_produk = dataProduct.getString("id_produk");
+                String nama_produk = dataProduct.getString("nama_produk");
+                String gambar_produk = dataProduct.getString("gambar_produk");
+                String desk_produk = dataProduct.getString("desk_produk");
+                String id_kategori_produk = dataProduct.getString("id_kategori_produk");
+                String harga_produk = dataProduct.getString("harga_produk");
+                String kategori_produk = dataProduct.getString("kategori_produk");
+                String Quantity = dataProduct.getString("kuantity");
+                String subtotal = dataProduct.getString("subtotal");
+
+                showMenu setData = new showMenu();
+                setData.setId_product(id_produk);
+                setData.setNama_produk(nama_produk);
+                setData.setGambar_produk(gambar_produk);
+                setData.setDesk_produk(desk_produk);
+                setData.setId_kategori_produk(id_kategori_produk);
+                setData.setHarga_produk(Integer.parseInt(harga_produk));
+                setData.setKategorii_produk(kategori_produk);
+                setData.setQuantity(Integer.parseInt(Quantity));
+                setData.setSubtotal(Integer.parseInt(subtotal));
+                mListData.add(setData);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return mListData;
+    }
+
     public showMenu getSpesificData(String response){
 
         showMenu setData = new showMenu();
@@ -91,6 +140,7 @@ public class ConvertData {
                 String kategori_produk = dataProduct.getString("kategori_produk");
 
 
+
                 setData.setId_product(id_produk);
                 setData.setNama_produk(nama_produk);
                 setData.setGambar_produk(gambar_produk);
@@ -98,6 +148,7 @@ public class ConvertData {
                 setData.setId_kategori_produk(id_kategori_produk);
                 setData.setHarga_produk(Integer.parseInt(harga_produk));
                 setData.setKategorii_produk(kategori_produk);
+
             }
 
         } catch (JSONException e) {
@@ -138,7 +189,7 @@ public class ConvertData {
         return setData;
     }
 
-    public String insertData(final showMenu dataInsert, String baseUrl) {
+    public void insertData(final showMenu dataInsert, String baseUrl) {
 
         baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_insertOrderMenu.php";
 
@@ -149,8 +200,6 @@ public class ConvertData {
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);
-
-                    Log.d("messagenya",""+jsonObject.getString("message"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -177,7 +226,6 @@ public class ConvertData {
             }
         };
         WebServices.getmInstance(context).addToRequestque(stringRequest);
-        return successMessage;
     };
 
 

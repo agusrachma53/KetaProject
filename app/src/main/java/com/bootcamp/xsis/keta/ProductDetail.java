@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,19 +55,22 @@ import java.util.Map;
 public class ProductDetail extends AppCompatActivity {
 
     private Context mcontext;
-    private SessionManager session;
     private showMenu showMenus;
     private String baseUrl;
+    private int totalqty;
     private ProgressDialog mProgressDialog;
-    private TextView Total;
     private TextView name_product;
     private TextView price_produc;
-    private TextView total,actCharts;
-    private int actChart,hasil,hasil2;
+    private TextView total,actCharts,Total;
+    private int actChart;
+    private CharSequence hasil;
+    private int hasil2;
     private ImageView icon;
     private ArrayAdapter<String> dataAdapter;
     private Spinner qtyList;
     private Button GoToChart;
+    SessionManager session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +86,7 @@ public class ProductDetail extends AppCompatActivity {
         final Intent intent = (Intent) getIntent();
         final String idProduct = intent.getExtras().getString("idProduct");
         final String idSelect = intent.getExtras().getString("idSelect");
+        session = new SessionManager( getApplicationContext());
 
         Total = (TextView) findViewById(R.id.name_of_total);
         name_product = (TextView) findViewById(R.id.name_of_item_detail2);
@@ -113,6 +120,7 @@ public class ProductDetail extends AppCompatActivity {
 
             baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_product.php?idProduct="+idProduct;
 
+
             StringRequest request = new StringRequest(Request.Method.GET, baseUrl, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -121,7 +129,6 @@ public class ProductDetail extends AppCompatActivity {
                     ConvertData convertData = new ConvertData(mcontext);
                     final showMenu datanya =  convertData.getSpesificData(response);
 
-                    String nama_produk;
                     final String dataarray[] = new String[5];
                     dataarray[0] = datanya.getNama_produk();
                     dataarray[1] = datanya.getGambar_produk();
@@ -130,9 +137,9 @@ public class ProductDetail extends AppCompatActivity {
                     dataarray[4] = datanya.getKategorii_produk();
 
 
+
                     name_product.setText(datanya.getNama_produk());
                     price_produc.setText(String.valueOf(datanya.getHarga_produk()));
-
                     icon = (ImageView) findViewById(R.id.icon_detail_view);
                     String imagenya = datanya.getGambar_produk();
                     Picasso.with(ProductDetail.this).load(imagenya).into(icon);
@@ -161,24 +168,37 @@ public class ProductDetail extends AppCompatActivity {
                         }
                     });
 
+                    if(session.qty() == null){
+                        totalqty = 0;
+                    }else{
+                        totalqty = Integer.parseInt(session.qty());
+                    }
 
                      /* Parsing TO Chart Page */
                     GoToChart.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String qty2 = qtyList.getSelectedItem().toString();
-                            int qty3 = Integer.parseInt(qty2);
+                            mProgressDialog.show();
+
+                            /* count subtotal */
+                            int qty3 = Integer.parseInt(String.valueOf(qtyList.getSelectedItem().toString()));
                             final int price3 = datanya.getHarga_produk();
                             int hasil4 = price3 * qty3;
-                            mProgressDialog.show();
+
+                            /* Count QTY */
+                            actChart = qty3;
+                            hasil = actCharts.getText();
+                            hasil2 = Integer.parseInt((String) hasil) + actChart;
+                            session.sessionChart(String.valueOf(hasil2));
+                            totalqty = Integer.parseInt(session.qty());
+                            actCharts.setText(String.valueOf(totalqty));
+
+                            /* Go To Cart */
                             GotoChart(idProduct,qty3,hasil4,idSelect,dataarray);
-                            actChart = Integer.parseInt(qty2);
-                            hasil = actChart;
-                            hasil2 = hasil + actChart;
-                            actCharts.setText(String.valueOf(hasil2));
                         }
                     });
 
+                    actCharts.setText(String.valueOf(totalqty));
 
                 }
             }, new Response.ErrorListener() {
@@ -196,7 +216,7 @@ public class ProductDetail extends AppCompatActivity {
 
         String table = "ordermenu";
 
-        baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_ordermenu.php?idUser=1&idProduk="+idProduct;
+        baseUrl = "https://ph0001.babastudio.org/afand_store/serviceforajax/m_ordermenu.php?idUser=3&idProduk="+idProduct;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, baseUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -222,8 +242,11 @@ public class ProductDetail extends AppCompatActivity {
                 setData.setSubtotal(Subtotal);
                 setData.setTotalAkhir(Subtotal);
 
-                String inserData = convertData.insertData(setData,baseUrl);
-                Log.d("Messagenya",""+inserData);
+                convertData.insertData(setData,baseUrl);
+
+                ConstraintLayout container = (ConstraintLayout) findViewById(R.id.detailContainer);
+                Snackbar snackbar = Snackbar.make(container,"Success Add Cart",Snackbar.LENGTH_LONG);
+                snackbar.show();
 
             }
         }, new Response.ErrorListener() {
