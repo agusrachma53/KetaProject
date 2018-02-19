@@ -81,7 +81,7 @@ public class AccountFragment extends Fragment {
         String phone = session.phone();
         String pass = session.pass();
 
-        cursor = queryHelper.login(phone, pass);
+//        cursor = queryHelper.login(phone, pass);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
             String Id = cursor.getString(0);

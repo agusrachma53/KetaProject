@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,12 +51,22 @@ public class PaymentPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_page);
+
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.detail_custom_actionbar);
+        getSupportActionBar().getCustomView();
+
+
         mContext = this;
         dbHelper = new SQLiteDbHelper(mContext);
         qrHelper = new QueryHelper(dbHelper);
         session = new SessionManager(getApplicationContext());
         sessionKP = new SessionManagerKP(getApplicationContext());
         this.mContext = mContext;
+
+
 
         Intent inten = (Intent) getIntent();
         final String ambilID = inten.getExtras().getString("idNya");

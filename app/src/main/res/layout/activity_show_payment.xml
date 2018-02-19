@@ -62,7 +62,7 @@
                         android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
                         android:paddingTop="10dp"
-                        android:text="Please make payment after booking"
+                        android:text="Please Finishing Your Payment Before 3 Hours"
                         android:textColor="@android:color/holo_red_dark"
                         android:textStyle="italic" />
                 </LinearLayout>

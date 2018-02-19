@@ -46,7 +46,7 @@ public class SplashViewActivity extends Activity {
         };
         Timer timer = new Timer();
         timer.schedule(task, splashDelay);
-        importDatabase();
+//        importDatabase();
     }
 
     private void importDatabase(){

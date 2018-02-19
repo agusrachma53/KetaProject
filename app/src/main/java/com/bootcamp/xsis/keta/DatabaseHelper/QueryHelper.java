@@ -49,12 +49,12 @@ public class QueryHelper {
     public static String kodepesanan = "kode_pesanan";
 
 
-    //query show Login
-    public Cursor login(String phones, String passwords) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        cursor = db.rawQuery("SELECT * FROM login WHERE phone_user = '" + phones + "' AND pass_user = '" + passwords + "'", null);
-        return cursor;
-    }
+//    //query show Login
+//    public Cursor login(String phones, String passwords) {
+//        SQLiteDatabase db = dbHelper.getReadableDatabase();
+//        cursor = db.rawQuery("SELECT * FROM login WHERE phone_user = '" + phones + "' AND pass_user = '" + passwords + "'", null);
+//        return cursor;
+//    }
 
     //show all data login
     public Cursor loginAll() {

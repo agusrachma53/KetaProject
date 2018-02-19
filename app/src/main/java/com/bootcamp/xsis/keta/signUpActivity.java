@@ -125,7 +125,7 @@ public class signUpActivity extends AppCompatActivity {
                 b_pass = e_password.getText().toString();
 
                 if (b_name.trim().length() > 5 && b_phone.trim().length()>5 && b_pass.trim().length()>5){
-                    cursor = queryHelper.login(b_phone, b_pass);
+//                    cursor = queryHelper.login(b_phone, b_pass);
                     if (cursor.getCount()> 0){
                         Toast.makeText(getApplicationContext(), "Your Account Already Exsist \n Please Another Phone Number", Toast.LENGTH_SHORT).show();
 

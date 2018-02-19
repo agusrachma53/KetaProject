@@ -1,6 +1,9 @@
 package com.bootcamp.xsis.keta;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -43,11 +46,14 @@ import java.util.List;
 public class ChartPage extends AppCompatActivity {
 
     private SessionManagerKP sessionKP;
-    Context mcontext;
+    private Context mcontext;
     private SQLiteDbHelper sqLiteDBHelper;
     public QueryHelper sqlHelper;
-    showMenu[] showMenus;
+    private showMenu[] showMenus;
     String baseUrl;
+    private AlertDialog.Builder builder;
+    private ProgressDialog mProgressDialog;
+    private TextView totalAkhir;
 
     //data array
     String[] data;
@@ -82,8 +88,7 @@ public class ChartPage extends AppCompatActivity {
             backToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(i);
+                    onBackPressed();
                 }
             });
 
@@ -126,11 +131,31 @@ public class ChartPage extends AppCompatActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(mcontext));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(customAdapterChart);
+
+                // get total
+                showMenu getTotal = convertData.getTotal(response);
+                totalAkhir = (TextView) findViewById(R.id.TotalAkhir);
+                totalAkhir.setText(String.valueOf(getTotal.getTotalAkhir()));
+
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                mProgressDialog.dismiss();
+                builder.setTitle("Information");
+                builder.setCancelable(true);
+                builder.setMessage("Please Check Your Connection ...");
+                builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mProgressDialog.show();
+                        getDataChart();
+                    }
+                });
+                AlertDialog xxx = builder.create();
+                xxx.setCanceledOnTouchOutside(false);
+                xxx.show();
             }
         });
 
@@ -140,9 +165,9 @@ public class ChartPage extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
-        super.onBackPressed();
     }
 
     private void checkOrderKodePesanan(int id_users, String namaUser){

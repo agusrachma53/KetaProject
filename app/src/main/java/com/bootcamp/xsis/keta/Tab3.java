@@ -3,6 +3,7 @@ package com.bootcamp.xsis.keta;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -101,6 +102,20 @@ public class Tab3 extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
+                builder.setTitle("Information");
+                builder.setCancelable(true);
+                builder.setMessage("Please Check Your Connection ...");
+                builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mProgressDialog.show();
+                        getdata();
+                    }
+                });
+                AlertDialog xxx = builder.create();
+                xxx.setCanceledOnTouchOutside(false);
+                xxx.show();
             }
         });
 

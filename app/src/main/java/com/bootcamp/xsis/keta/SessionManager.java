@@ -44,11 +44,9 @@ public class SessionManager {
     //Quantity Key
     public static final String KEY_QTY = "0";
 
-    //message
-    public static final String KEY_MESSAGE = "message";
+    //id Useer Key
+    public static final String KEY_ID = "idUser";
 
-    //Total
-    public static final String KEY_TOTAL = "0";
 
     //Constructor
     public SessionManager(Context context){
@@ -65,22 +63,10 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void sessionMessage(String message){
 
-        editor.putString(KEY_MESSAGE,message);
-        editor.commit();
-
-    }
-
-    public void total(String total){
-
-        editor.putString(KEY_MESSAGE,total);
-        editor.commit();
-
-    }
 
     //Login Session
-    public void createLoginSession (String phone, String password){
+    public void createLoginSession (String phone, String password, String idUser){
         //storing login login value as true
         editor.putBoolean(IS_LOGIN, true);
 
@@ -92,6 +78,10 @@ public class SessionManager {
 
         //storing password in pref
         editor.putString(KEY_PASS, password);
+
+        //storing idUser in preef
+        editor.putString(KEY_ID,idUser);
+
 
         //commit changes
         editor.commit();
@@ -144,15 +134,6 @@ public class SessionManager {
         return qty;
     }
 
-    public String total(){
-        String total = pref.getString(KEY_TOTAL,null);
-        return total;
-    }
-
-    public String message(){
-        String message = pref.getString(KEY_MESSAGE,null);
-        return message;
-    }
 
     //Clear Session detail
     public void logoutUser(){

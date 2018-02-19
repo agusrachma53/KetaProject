@@ -1,7 +1,9 @@
 package com.bootcamp.xsis.keta;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -69,6 +71,7 @@ public class ProductDetail extends AppCompatActivity {
     private ArrayAdapter<String> dataAdapter;
     private Spinner qtyList;
     private Button GoToChart;
+    private AlertDialog.Builder builder;
     SessionManager session;
 
 
@@ -205,6 +208,19 @@ public class ProductDetail extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     mProgressDialog.dismiss();
+                    builder.setTitle("Information");
+                    builder.setCancelable(true);
+                    builder.setMessage("Please Check Your Connection ...");
+                    builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mProgressDialog.show();
+                            getdata(idProduct,idSelect);
+                        }
+                    });
+                    AlertDialog xxx = builder.create();
+                    xxx.setCanceledOnTouchOutside(false);
+                    xxx.show();
                 }
             });
 
@@ -252,6 +268,20 @@ public class ProductDetail extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mProgressDialog.dismiss();
+                builder.setTitle("Information");
+                builder.setCancelable(true);
+                builder.setMessage("Please Check Your Connection ...");
+                builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mProgressDialog.show();
+                        getdata(idProduct,idSelect);
+                    }
+                });
+                AlertDialog xxx = builder.create();
+                xxx.setCanceledOnTouchOutside(false);
+                xxx.show();
             }
         });
 

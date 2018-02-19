@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bootcamp.xsis.keta.DatabaseHelper.QueryHelper;
 import com.bootcamp.xsis.keta.DatabaseHelper.SQLiteDbHelper;
 import com.bootcamp.xsis.keta.Adapter.showMenu;
+import com.bootcamp.xsis.keta.model.Customer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -82,14 +83,14 @@ public class MainActivity extends AppCompatActivity
 
         user_name_header = (TextView) navHeaderView.findViewById(R.id.user_name_header);
         user_phone_header = (TextView) navHeaderView.findViewById(R.id.user_phone_header);
-             cursor = queryHelper.login(phone,pass);
-               if (cursor.getCount()>0){
-           cursor.moveToPosition(0);
-        user_name_header.setText(cursor.getString(1));
-         user_phone_header.setText(cursor.getString(2));
-       }else {
-           Toast.makeText(this, "Failed Account", Toast.LENGTH_SHORT).show();
-        }
+//             cursor = queryHelper.login(phone,pass);
+//               if (cursor.getCount()>0){
+//           cursor.moveToPosition(0);
+//        user_name_header.setText(cursor.getString(1));
+//         user_phone_header.setText(cursor.getString(2));
+//       }else {
+//           Toast.makeText(this, "Failed Account", Toast.LENGTH_SHORT).show();
+//        }
 
    }
 
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
 //            moveTaskToBack(true);
+                finish();
         }
     }
 
@@ -134,9 +136,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Fragment fragment = null;
         Class fragmentClass = null;
-        String phonex = session.phone();
-        showMenu[] getDataDrawer = queryHelper.detailUser(phonex);
-        int idnya = getDataDrawer[0].getId_user();
+        Customer customer = new  Customer();
+        int idnya = customer.getCustomer_id();
         if (id == R.id.nav_Menu) {
             fragmentClass = FragmentOne.class;
         } else if (id == R.id.nav_myAccount) {

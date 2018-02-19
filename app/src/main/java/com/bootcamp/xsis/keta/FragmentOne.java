@@ -199,4 +199,5 @@ public class FragmentOne extends Fragment implements TabLayout.OnTabSelectedList
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

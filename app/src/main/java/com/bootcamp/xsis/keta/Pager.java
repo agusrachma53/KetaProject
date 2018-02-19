@@ -23,15 +23,12 @@ public class Pager extends FragmentStatePagerAdapter {
         switch (position){
             case 0:
                 Tab1 tab1 = new Tab1();
-                System.out.println("Satu");
                 return tab1;
             case 1:
                 Tab2 tab2 = new Tab2();
-                System.out.println("Dua");
                 return tab2;
             case 2:
                 Tab3 tab3 = new Tab3();
-                System.out.println("Tiga");
                 return tab3;
             default:
                 return null;
